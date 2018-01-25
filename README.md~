@@ -1,0 +1,26 @@
+
+a phenppacket is:  
+A hieriartical record consisting of an identified container 
+with one or or more sections deawn from these catagories:
+  
+    "title"
+    "entities"
+    "variants"
+    "persons"
+    "organisms"
+    "phenotype_profile"
+    "diagnosis_profile"
+    "environment_profile"
+
+( 
+ Does order matter? 
+ Should catagories be lexicaly ordered? 
+ Can there be repeats? 
+ What about empty sections?
+ Can there be repetes? 
+ Is it a set?
+) 
+ 
+# to get the structure from the json-schemsa file into a tab indented tree
+jq . phenopacket-schema.json | cut -f1 -d ':' | grep -v "}" | sed 's/  /\t/g' > phenopacjet_sehema_structure.tab
+    
