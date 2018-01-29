@@ -29,9 +29,9 @@ we need to limit the structure and content of our graph representations to ensur
 that valid, simplifying, assumptions may be made by our algorithms if they are to scale.
 
 The Computer Science background links included in this document are here
-to convey the magnitude of the issue and how unfrivolous proposed constraints are.   
-However one need not follow the math and jargon to appreicate that
-neither seventy years of trying nor a million dollar prize
+to convey the magnitude of the issue and necessity of these proposed constraints.    
+However, one need not closely follow the math and jargon to appreicate that
+neither seventy years of brilliant minds nor a million dollar prizes
 have produced solutions to the fundamental problem,
 which lends weight to the importance of  
 __an exchange format that guarentees shortcuts are possible__.
@@ -61,23 +61,21 @@ which have conflicting requirements. These include
 Mutability and accountability are vaguely opposites,
 but from an open exchange format viewpoint, are similar to each other.
 
-- Mutability allows exchanges to become more complete/correct over time.
+- Mutability allows exchanged artifacts to become more complete/correct over time.
 
-- Accountability requires an exchange is preserved forever unchanged.
+- Accountability requires an exchanged artifact be preserved forever unchanged.
 
 
-Good identifiers and versioning will help with both,
-but those issues are in the domain of the repository using the open exchange format
-which only needs to avoid interfering with whatever policy the repository
-chooses without insisting all repositories adhere to the same policy
+Proper [identifier disipline]() will help with both,
+but those issues are in the domain of the repository using the open exchange format which only needs to avoid interfering with whatever policy the repository chooses without insisting all repositories adhere to the same policy.
 
 Uniform metadata must be supported, but not uniformly required.
 
 
-Computability and expressiveness are the less nuanced
+Computability and expressiveness are less nuanced
 on one hand you have to be able to communicate something useful
-and on the other hand every bit of flexibility allowed reduces
-the scale achievable (guarenteed).
+and on the other hand every bit of flexibility in expression allowed reduces
+the scale achievable.
 
 So not allowing anything which is not necessary is the clear path.
 
@@ -139,43 +137,43 @@ Interior nodes provide structure to determine how leaf nodes are grouped.
 Leaf nodes are used to carry (external) data
 
 
-We can not know the leaf/data node values in advancce,
-but we must be able to predefine/label/type every internal node allowable.
+We can not know all of the leaf/data node values in advancce,
+but we can and must externaly predefine, label and type every internal node and edge.
+
 
 Explicitly noting here that
 an internal node may only exist exactly once in a tree,
-and leaf nodes being data, are outside our control may contain duplicate values. 
+and leaf nodes which may be data, are outside our control may contain duplicate values. 
 
 Directed rooted trees can also be seen as unordered lists of unordered lists.
 
-Practically speaking, at least some of these unordered lists will have common
-stuctural patterns.
+Practically speaking, these unordered lists may have a common stuctural pattern.
 
 - collection
   - item_a
-    - key_1
-      - _value_
-    - key_3
-      - _value_
-    - key_2
-      - _value_
+     - key_1
+          - _value_
+     - key_3
+          - _value_
+     - key_2
+          - _value_
   - item_c        
-    - key_1
-      - _value_
-    - key_2
-      - _value_
-    - key_3
-      - _value_
+     - key_1
+          - _value_
+     - key_2
+          - _value_
+     - key_3
+          - _value_
   - item_b
-    - key_2
-      - _value_
-    - key_3
-      - _value_
-    - key_1
-      - _value_
+     - key_2
+         - _value_
+     - key_3
+         - _value_
+     - key_1
+         - _value_
 
 where all the `items` (rdfs:Class) in a `collection` (rdfs:Bag)
-share a set of `key`s (rdf:Property) which may be given different _values_
+share a set of `keys` (rdf:Property) which may be given different _values_
 which have an (rdf:type).
 
 depending on your background this may sound like:
@@ -184,7 +182,10 @@ depending on your background this may sound like:
  - an array of dictionaries
  - a list of records
 
-Or a number of other phrases, many names for a useful concept.
+Or a number of other phrases, many names for a useful concept.  
+The fun starts when we allow a _value_ to be the root of a distinctly different  `collection`.
+
+
 
 
 ## Discussion of Graph meaning 
