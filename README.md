@@ -149,7 +149,7 @@ Directed rooted trees can also be seen as unordered lists of unordered lists.
 
 Practically speaking, these unordered lists may have a common stuctural pattern.
 
-- collection
+- envelope
   - item_a
      - key_1
           - _value_
@@ -172,9 +172,9 @@ Practically speaking, these unordered lists may have a common stuctural pattern.
      - key_1
          - _value_
 
-where all the `items` (rdfs:Class) in a `collection` (rdfs:Bag)
-share a set of `keys` (rdf:Property) which may be given different _values_
-which have an (rdf:type).
+where all the `items` (rdfs:Class) in a `envelope` (rdfs:Container) (or doubtfuly rdf:List)
+share a set of `keys` (rdf:Property) which may be associated with different _values_
+which have an (rdf:type) or datatype if they are `Plain Literal`.
 
 depending on your background this may sound like:
 
@@ -183,9 +183,12 @@ depending on your background this may sound like:
  - a list of records
 
 Or a number of other phrases, many names for a useful concept.  
-The fun starts when we allow a _value_ to be the root of a distinctly different  `collection`.
+The fun starts when we allow a _value_ to be a different `envelope`.
 
-
+note: the generic term `envelope` here is just a stand in
+for one of the more loaded terms
+[ collection, container, list, array, series ,sequence, set, bag,  ] 
+which may unintentionaly imply either more or less than I intend at the moment
 
 
 ## Discussion of Graph meaning 
@@ -203,7 +206,8 @@ A good source for the more generic of these predefined patterns is the
 which has been in use for over twenty years now and has most of the kinks worked out.  
 As more specific patterns become absoultley necessary we must create or adopt
 [ontologies](http://tomgruber.org/writing/ontology-definition-2007.htm) which
-carefully describe the patterns we are expressing in a way that allows 
+carefully describe the patterns we are expressing in a way that allows them
+to meaningfully interact in a mechinistic way with other unknown patterns 
 
 
 
@@ -221,8 +225,29 @@ are:
  - `rdfs:comment` optional for longer human readable descriptions
  
 
+## Summary
+
+Semantic (sub)graph exchange is a thorny problem.
+Limiting our exchange structure to a particular (fractal) tree pattern
+can, when combined with others, result in a complex
+but reltivity tractable Directed Acyclic Graph.
+
+Insisting our directed rooted trees are structured as a
+"list of records" which allows the _value_ of a record's field
+to be another "list of records" is a viable way of keeping exchanged
+artifacts from being full graphs with their associated costs. 
+This comes with the expense of sometimes needing to place
+the same datum as a leaf in more than one branch or tree.
+And, depending on the implementation,
+may require circularity checks on collections which are values.
+
+Leveraging the Semantic Web's definitions for common, higher level constructs,
+and metadata standards 
+
 --------------------------------------------------------------
-## Abstractly a phenopacket is  
+# Phenopackets now
+
+Abstractly a phenopacket is:    
 
 A set of associated statments which conform to a prexisting structure.
 
@@ -232,13 +257,13 @@ A versioned fragment of a knowlege graph structured according
 to semantic web and resource description framework (RDF) constraints. 
 
 Addional constrains limit the structure of each fragment to
-a directed graph with a single root (typicallt a tree 
+a directed graph with a single root (a tree) 
 
 ## Practical considerations
    ...
 
 
-## Currently a phenopacket is:
+## Currently phenopacket implementation:
  
 A hierarchical record consisting of a container 
 with a human readable label (title) and a unique identifier
@@ -278,23 +303,20 @@ with one or more sections drawn from these catagories:
 
  - "organisms"
 
-
  - "phenotype_profile"
-
 
  - "diagnosis_profile"
 
-
  - "environment_profile"
 
+ 
+-----------------------------------------------------------
 
-( 
- Does order matter? 
- Should catagories be lexicaly ordered? 
- Can there be repeats? 
- What about empty sections?
- Can there be repetes? 
- Is it a set?
+(  
+ Does order matter?  
+ Should catagories be lexicaly ordered?  
+ Can there be repeats?  
+ What about empty sections?  
 ) 
 
 
@@ -310,7 +332,7 @@ with one or more sections drawn from these catagories:
 PhenoPacket
 model:entity:Entity
 model:entity:Variant
-model:entity:Person
+model:entity:                            # (miss used)
 model:ontology:OntologyClass             # reused
 model:entity:Organism
 model:association:PhenotypeAssociation
