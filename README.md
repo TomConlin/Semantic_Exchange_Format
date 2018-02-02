@@ -147,7 +147,13 @@ and leaf nodes which may be data, are outside our control may contain duplicate 
 
 Directed rooted trees can also be seen as unordered lists of unordered lists.
 
-Practically speaking, these unordered lists may have a common stuctural pattern.
+These unordered lists could be quite arbitrary but if we limit ourselves
+to a simple repeatable pattern they become more predictable which is important
+when reading, writing and verifying.
+
+The simplest stuctural pattern I belive could suffice is at the first level
+the digital equivelent of a box of flash cards.
+
 
 - envelope
   - item_a
@@ -172,9 +178,9 @@ Practically speaking, these unordered lists may have a common stuctural pattern.
      - key_1
          - _value_
 
-where all the `items` (rdfs:Class) in a `envelope` (rdfs:Container) (or doubtfuly rdf:List)
-share a set of `keys` (rdf:Property) which may be associated with different _values_
-which have an (rdf:type) or datatype if they are `Plain Literal`.
+where all the `items` (rdfs:Class) in a `envelope` (rdfs:Container)
+share a set of `keys` (rdf:Property) which may be associated with _values_
+which have an (rdf:type) or a datatype if they are `Plain Literal`.
 
 depending on your background this may sound like:
 
@@ -187,43 +193,44 @@ The fun starts when we allow a _value_ to be a different `envelope`.
 
 note: the generic term `envelope` here is just a stand in
 for one of the more loaded terms
-[ collection, container, list, array, series ,sequence, set, bag,  ] 
-which may unintentionaly imply either more or less than I intend at the moment
+[ collection, container, list, array, series ,sequence, set, bag, ... ] 
+which may unintentionaly imply either more or less than I intend at the moment.
 
 
 ## Discussion of Graph meaning 
 
-With each internal node needing to be unique, a node could just be
-given a pseudo random identifier/label based on its path to the root
-but there is also the oppertunity for every internal node
-to corespond with a predefined pattern.
+With each internal node needing to be uniquely identified, a node could just be
+given a pseudo random identifier/label based on the path to its root
+but there is also the opportunity for every internal node
+to coresppond with a predefined pattern.
 
 If these predefined patterns are drawn from well estabilished libraries
-of pattern then graph fragments from unrelated sources have some chance of
-matching up in a meaningful way.
-A good source for the more generic of these predefined patterns is the
+of patterns then graph fragments from unrelated sources may
+overlap in a meaningful way.
+
+A good source for the most generic of these predefined patterns is the
 [W3C Resource Description Framework](https://en.wikipedia.org/wiki/Resource_Description_Framework)
 which has been in use for over twenty years now and has most of the kinks worked out.  
-As more specific patterns become absoultley necessary we must create or adopt
+As more specific patterns become necessary we must adopt or if necessary create
 [ontologies](http://tomgruber.org/writing/ontology-definition-2007.htm) which
 carefully describe the patterns we are expressing in a way that allows them
-to meaningfully interact in a mechinistic way with other unknown patterns 
+to meaningfully interact in a mechinistic way with other unknown patterns. 
+
+Some core elements  of RDF which are applicacable to every internal
+node and many leaf nodes regardless of the domain are:  
+
+ - `rdf:type`  which identifies the concept/resourse in an external ontology
+ - `rdfs:label`  for a human readable string for the concept/resource  
+   (only a human readability conveniance, the ontology label takes precedence).
+ - `rdfs:comment` optional for longer human readable descriptions.
 
 
+Althought I the concepts thus far are more broadly applicacable
+for Semantic Exchanges the use case I neeed to focus on is
+biomedical phenotypes and related concepts including genotype, enviroments, substances etc.
+so the ontologies I will refer to are mainly [Open Biomedical Ontologies](http://www.obofoundry.org/)
+(OBO) 
 
-
-Althought I do hope the concepts here are more broadly applicacable
-for Semantic Exchanges the use case I neeed to focus in on is
-
-biomedical phenotypes and related concepts.
-Some core RDF concepts which can be applicacable to every internal node regardless of the domain
-are:
-
- - `rdf:type` which identifies the concept/resourse in the specified external ontology
- - `rdfs:label` for a human readable string for the concept/resource  
-   (a conveniance, ontology label takes precedence).
- - `rdfs:comment` optional for longer human readable descriptions
- 
 
 ## Summary
 
