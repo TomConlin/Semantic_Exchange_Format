@@ -44,7 +44,7 @@ Before the phenotype tool landscape can become as rich,
 well defined standard interchange formats which limit computational complexity are necessary.
 
 --------------------------------------------------------------
-## Graph Structure Discussion
+## On Graph Structure
      
 Any solution to the above problem will address the points below.
 
@@ -199,33 +199,42 @@ Or a number of other phrases, many names for a useful concept.
 
 This simple pattern is useful as a building block
 in a more complex model when we allow a leaf (_value_) of one building block
-the become the root (`en`) of another buliding block.
+the become the root (`envelope`) of another buliding block.
 
 With the deck of flash cards analogy;  
 The answer on one of the first deck's card would be to switch to a different deck.
 
-The only strict rule is: a 'deck' may only appear exactly once on any branch of the tree.
+The only strict rule is: a 'deck' may only appear exactly once
+on any branch of the tree.
 I suspect a more sensible rule is the generalization:
 a deck should only exist once in a tree.
 
 
 note: the generic terms `envelope` and `item` here are just stand in's
-for the more loaded terms
+for the more loaded terms  
 [collection, container, list, array, series ,sequence, set, bag, ... ]  
 and
 [class, record, map, dictionary, associative array, ... ]  
 which through their use in practice may unintentionaly imply
 either more or less than I intend at the moment.
 
+What is important is an outer construct loosly associating
+inner constructs containing tight associations. 
 
+A tree of four levles is relativly short,
+computationaly not too expensive and they look nice, they are shrubs.
 
+## On Graph Meaning 
 
-## Discussion of Graph meaning 
-
-As each internal node needs to be uniquely identified (within the tree),
+As each internal node needs to be unique within the tree,
 a node could be given a pseudo random identifier/label based on the path to its root
-but there is also the opportunity for every internal node
-to coresppond with a predefined pattern.
+but there is also the opportunity for
+
+ - all non-leaf nodes
+ - some leaf nodes
+ - all edges
+ 
+to have estabilished definitions.
 
 If these predefined patterns are drawn from well estabilished libraries
 of patterns then graph fragments from unrelated sources may
@@ -248,7 +257,7 @@ node and many leaf nodes regardless of the domain are:
  - `rdfs:comment` optional for longer human readable descriptions.
 
 
-Althought I the concepts thus far are more broadly applicacable
+Althought the concepts thus far are broadly applicacable
 for Semantic Exchanges the use case I neeed to focus on is
 biomedical phenotypes and related concepts including genotype, enviroments, substances etc.
 so the ontologies I will refer to are mainly [Open Biomedical Ontologies](http://www.obofoundry.org/)
