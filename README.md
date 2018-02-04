@@ -1,14 +1,14 @@
-# Tom's long diatribe.  Read
+# Bring me a Shrubbery!
 
 ## Structural Problem
 
 Phenotype data lacks a well defined standard exchange format
 
-Phenotype data is profoundly different than geneotype data.
+Phenotype data is profoundly different than genotype data.
 Bioinformatics already has a decent handle on genotype data.
-Genotype data is basicly ordered linear lists (DNA RNA genes protiens ...)
+Genotype data is basically ordered linear lists (DNA RNA genes proteins ...)
 algorithms for working with lists are well behaved and
-only incremental improvments may be expected in the general case.
+only incremental improvements may be expected in the general case.
 
 
 Capturing Phenotypes requires a branching data structure to describe entities
@@ -16,11 +16,11 @@ and related features where the order of the relationships is strictly arbitrary.
 
 Although I am currently motivated by phenotypes in particular, the
 thoughts in this document should be applicable to many other domains
-requireing a graph/network representation. 
+requiring a graph/network representation. 
 
 
 Graph algorithms are of a higher order of complexity than list algorithms,
-some graph algorithm have no known efficent solutions including 
+some graph algorithm have no known efficient solutions including 
 the simple sounding "_Is this graph within that graph?_"
 (see: [Subgraph isomorphism problem](https://en.wikipedia.org/wiki/Subgraph_isomorphism_problem)
 
@@ -30,11 +30,11 @@ that valid, simplifying, assumptions may be made by our algorithms if they are t
 
 The Computer Science background links included in this document are here
 to convey the magnitude of the issue and necessity of these proposed constraints.    
-However, one need not closely follow the math and jargon to appreicate that
+However, one need not closely follow the math and jargon to appreciate that
 neither seventy years of brilliant minds nor a million dollar prizes
 have produced solutions to the fundamental problem,
 which lends weight to the importance of  
-__an exchange format that guarentees shortcuts are possible__.
+__an exchange format that guarantees shortcuts are possible__.
 
   
 The genotype landscape is rich in tools which may be combined in a myriad of ways
@@ -53,7 +53,7 @@ which have conflicting requirements. These include
 
 
  - mutability (merge, split, change)
- - accountability (attribution, provanance, history)
+ - accountability (attribution, provenance, history)
  - computability
  - expressiveness
  - aggregation
@@ -66,7 +66,7 @@ but from an open exchange format viewpoint, are similar to each other.
 - Accountability requires an exchanged artifact be preserved forever unchanged.
 
 
-Proper [identifier disipline]() will help with both,
+Proper [identifier discipline]() will help with both,
 but those issues are in the domain of the repository using the open exchange format which only needs to avoid interfering with whatever policy the repository chooses without insisting all repositories adhere to the same policy.
 
 Uniform metadata must be supported, but not uniformly required.
@@ -107,7 +107,7 @@ Several constraints to make graph processing easier
 - No cycles of edges.
 without this constraint when traversing a graph you need
 to keep track every node you have visited and stop if you
-see one twice because you are in an infinate loop.
+see one twice because you are in an infinite loop.
 
 (This next one is only quasi true:)
   
@@ -115,12 +115,12 @@ see one twice because you are in an infinate loop.
  
 It is only quasi true because if we allow the same node
 be shared by different graphs then, __when combined__,
-there will be one incomming edge from each of the different graphs
+there will be one incoming edge from each of the different graphs
 which is what we want.
 
 With these three constraints we have simplified graphs in general into
 [directed rooted trees](https://en.wikipedia.org/wiki/Tree_\(graph_theory\))
-which are far more computible than complete graphs and are still fairly expressive
+which are far more computable than complete graphs and are still fairly expressive
 especially when these trees are allowed to overlap  
 (have nodes other than the root node in common),
 because they form a
@@ -129,17 +129,17 @@ which is often the sweet spot in complexity between modeling and computing.
 
 Nodes in a tree are of three types,
 
-- no edges comming in           (root node)
+- no edges coming in           (root node)
 - edges coming in and going out (interior node)
 - no edges going out            (leaf node)
 
-Being a rooted tree guarentees exactly one node without incomming edges  
+Being a rooted tree guarantees exactly one node without incoming edges  
 Interior nodes provide structure to determine how leaf nodes are grouped.  
 Leaf nodes are used to carry (external) data
 
 
-We can not know all of the leaf/data node values in advancce,
-but we can and must externaly predefine, label and type every internal node and edge.
+We can not know all of the leaf/data node values in advance,
+but we can and must externally predefine, label and type every internal node and edge.
 
 
 Explicitly noting here that
@@ -152,11 +152,11 @@ These unordered lists could be quite arbitrary but if we limit ourselves
 to a simple repeatable pattern they become more predictable which is important
 when reading, writing and verifying.
 
-The simplest stuctural pattern I belive could suffice is
+The simplest structural pattern I believe could suffice is
 one which could model of a deck of flash cards where
-cards in the deck are generaly related by having a similar theme.
+cards in the deck are generally related by having a similar theme.
 and questions one the front of each card are exactly related to answers
-on the back of the same card. This pattern forms a hirearechy four levels deep:
+on the back of the same card. This pattern forms a hierarchy four levels deep:
 (deck, card, front, back).  
 A deck may have many cards and each card many have many questions and answers.
 
@@ -199,7 +199,7 @@ Or a number of other phrases, many names for a useful concept.
 
 This simple pattern is useful as a building block
 in a more complex model when we allow a leaf (_value_) of one building block
-the become the root (`envelope`) of another buliding block.
+the become the root (`envelope`) of another building block.
 
 With the deck of flash cards analogy;  
 The answer on one of the first deck's card would be to switch to a different deck.
@@ -215,14 +215,14 @@ for the more loaded terms
 [collection, container, list, array, series ,sequence, set, bag, ... ]  
 and
 [class, record, map, dictionary, associative array, ... ]  
-which through their use in practice may unintentionaly imply
+which through their use in practice may unintentionally imply
 either more or less than I intend at the moment.
 
-What is important is an outer construct loosly associating
+What is important is an outer construct loosely associating
 inner constructs containing tight associations. 
 
-A tree of four levles is relativly short,
-computationaly not too expensive and they look nice, they are shrubs.
+A tree of four levels is relatively short,
+computationally not too expensive and they look nice, they are shrubs.
 
 ## On Graph Meaning 
 
@@ -234,9 +234,9 @@ but there is also the opportunity for
  - some leaf nodes
  - all edges
  
-to have estabilished definitions.
+to have well established context.
 
-If these predefined patterns are drawn from well estabilished libraries
+If these predefined patterns are drawn from well established libraries
 of patterns then graph fragments from unrelated sources may
 overlap in a meaningful way.
 
@@ -248,18 +248,18 @@ As more specific patterns become necessary we must adopt or if necessary create
 carefully describe the patterns we are expressing in a way that allows them
 to meaningfully interact in a mechanistic way with other unknown patterns. 
 
-Some core elements  of RDF which are applicacable to every internal
+Some core elements  of RDF which are applicable to every internal
 node and many leaf nodes regardless of the domain are:  
 
- - `rdf:type`  which identifies the concept/resourse in an external ontology
+ - `rdf:type`  which identifies the concept/resource in an external ontology
  - `rdfs:label`  for a human readable string for the concept/resource  
-   (only a conveniance, the ontology label takes precedence).
+   (only a convenience, the ontology label takes precedence).
  - `rdfs:comment` optional for longer human readable descriptions.
 
 
-Althought the concepts thus far are broadly applicacable
-for Semantic Exchanges the use case I neeed to focus on is
-biomedical phenotypes and related concepts including genotype, enviroments, substances etc.
+Although the concepts thus far are broadly applicable
+for Semantic Exchanges the use case I need to focus on is
+biomedical phenotypes and related concepts including genotype, environments, substances etc.
 so the ontologies I will refer to are mainly [Open Biomedical Ontologies](http://www.obofoundry.org/)
 (OBO) 
 
@@ -269,7 +269,7 @@ so the ontologies I will refer to are mainly [Open Biomedical Ontologies](http:/
 Semantic (sub)graph exchange is a thorny problem.
 Limiting our exchange structure to a particular (fractal) tree pattern
 can, when combined with others, result in a complex
-but reltivity tractable Directed Acyclic Graph.
+but relativity tractable Directed Acyclic Graph.
 
 Insisting our directed rooted trees are structured as a
 "list of records" which allows the _value_ of a record's field
@@ -288,11 +288,11 @@ and metadata standards
 
 Abstractly a phenopacket is:    
 
-A set of associated statments which conform to a prexisting structure.
+A set of associated statments which conform to a preexisting structure.
 
 ## Concretely  a phenopacket is
 
-A versioned fragment of a knowlege graph structured according
+A versioned fragment of a knowledge graph structured according
 to semantic web and resource description framework (RDF) constraints. 
 
 Addional constrains limit the structure of each fragment to
@@ -353,7 +353,7 @@ with one or more sections drawn from these catagories:
 
 (  
  Does order matter?  
- Should catagories be lexicaly ordered?  
+ Should categories be lexically ordered?  
  Can there be repeats?  
  What about empty sections?  
 ) 
