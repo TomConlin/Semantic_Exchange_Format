@@ -80,7 +80,8 @@ the scale achievable.
 So not allowing anything which is not necessary is the clear path.
 
 Deciding what is necessary will be different and growing problem
-but to begin with, anything is better than nothing.
+but to begin with, the simplest thing that could possibly work is
+what I am aiming for
 
 
 From [Wikipedia](https://en.wikipedia.org/wiki/Graph_\(discrete_mathematics\))
@@ -119,12 +120,12 @@ which is what we want.
 
 With these three constraints we have simplified graphs in general into
 [directed rooted trees](https://en.wikipedia.org/wiki/Tree_\(graph_theory\))
-which are far more computible than graphs and are still fairly expressive
+which are far more computible than complete graphs and are still fairly expressive
 especially when these trees are allowed to overlap  
 (have nodes other than the root node in common),
 because they form a
 [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph)
-which is often the sweet spot between modeling and computing.
+which is often the sweet spot in complexity between modeling and computing.
 
 Nodes in a tree are of three types,
 
@@ -151,8 +152,13 @@ These unordered lists could be quite arbitrary but if we limit ourselves
 to a simple repeatable pattern they become more predictable which is important
 when reading, writing and verifying.
 
-The simplest stuctural pattern I belive could suffice is at the first level
-the digital equivelent of a box of flash cards.
+The simplest stuctural pattern I belive could suffice is
+one which could model of a deck of flash cards where
+cards in the deck are generaly related by having a similar theme.
+and questions one the front of each card are exactly related to answers
+on the back of the same card. This pattern forms a hirearechy four levels deep:
+(deck, card, front, back).  
+A deck may have many cards and each card many have many questions and answers.
 
 
 - envelope
@@ -187,20 +193,37 @@ depending on your background this may sound like:
  - a set of bijections
  - an array of dictionaries
  - a list of records
+ - a trivial pursuit
+ 
+Or a number of other phrases, many names for a useful concept.
 
-Or a number of other phrases, many names for a useful concept.  
-The fun starts when we allow a _value_ to be a different `envelope`.
+This simple pattern is useful as a building block
+in a more complex model when we allow a leaf (_value_) of one building block
+the become the root (`en`) of another buliding block.
 
-note: the generic term `envelope` here is just a stand in
-for one of the more loaded terms
-[ collection, container, list, array, series ,sequence, set, bag, ... ] 
-which may unintentionaly imply either more or less than I intend at the moment.
+With the deck of flash cards analogy;  
+The answer on one of the first deck's card would be to switch to a different deck.
+
+The only strict rule is: a 'deck' may only appear exactly once on any branch of the tree.
+I suspect a more sensible rule is the generalization:
+a deck should only exist once in a tree.
+
+
+note: the generic terms `envelope` and `item` here are just stand in's
+for the more loaded terms
+[collection, container, list, array, series ,sequence, set, bag, ... ]  
+and
+[class, record, map, dictionary, associative array, ... ]  
+which through their use in practice may unintentionaly imply
+either more or less than I intend at the moment.
+
+
 
 
 ## Discussion of Graph meaning 
 
-With each internal node needing to be uniquely identified, a node could just be
-given a pseudo random identifier/label based on the path to its root
+As each internal node needs to be uniquely identified (within the tree),
+a node could be given a pseudo random identifier/label based on the path to its root
 but there is also the opportunity for every internal node
 to coresppond with a predefined pattern.
 
@@ -214,14 +237,14 @@ which has been in use for over twenty years now and has most of the kinks worked
 As more specific patterns become necessary we must adopt or if necessary create
 [ontologies](http://tomgruber.org/writing/ontology-definition-2007.htm) which
 carefully describe the patterns we are expressing in a way that allows them
-to meaningfully interact in a mechinistic way with other unknown patterns. 
+to meaningfully interact in a mechanistic way with other unknown patterns. 
 
 Some core elements  of RDF which are applicacable to every internal
 node and many leaf nodes regardless of the domain are:  
 
  - `rdf:type`  which identifies the concept/resourse in an external ontology
  - `rdfs:label`  for a human readable string for the concept/resource  
-   (only a human readability conveniance, the ontology label takes precedence).
+   (only a conveniance, the ontology label takes precedence).
  - `rdfs:comment` optional for longer human readable descriptions.
 
 
