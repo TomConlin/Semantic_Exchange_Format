@@ -1,5 +1,9 @@
 # Bring me a Shrubbery!
 
+  
+_note: this is a WIP seeking simplest thing which could work_  
+_hence: may still be too simple at a given point_  
+ 
 ## Structural Problem
 
 Phenotype data lacks a well defined standard exchange format
@@ -10,21 +14,21 @@ Genotype data is basically ordered linear lists (DNA RNA genes proteins ...)
 algorithms for working with lists are well behaved and
 only incremental improvements may be expected in the general case.
 
-
 Capturing Phenotypes requires a branching data structure to describe entities
 and related features where the order of the relationships is strictly arbitrary. 
 
 Although I am currently motivated by phenotypes in particular, the
 thoughts in this document should be applicable to many other domains
-requiring a graph/network representation. 
-
+requiring a graph/network representation.
+ 
 
 Graph algorithms are of a higher order of complexity than list algorithms,
 some graph algorithm have no known efficient solutions including 
 the simple sounding "_Is this graph within that graph?_"
 (see: [Subgraph isomorphism problem](https://en.wikipedia.org/wiki/Subgraph_isomorphism_problem)
 
-Short of a world changing breakthrough in Mathematics (see: [P versus NP problem](https://en.wikipedia.org/wiki/P_versus_NP_problem))
+Short of a world changing breakthrough in Mathematics
+(see: [P versus NP problem](https://en.wikipedia.org/wiki/P_versus_NP_problem))
 we need to limit the structure and content of our graph representations to ensure
 that valid, simplifying, assumptions may be made by our algorithms if they are to scale.
 
@@ -35,13 +39,13 @@ neither seventy years of brilliant minds nor a million dollar prizes
 have produced solutions to the fundamental problem,
 which lends weight to the importance of  
 __an exchange format that guarantees shortcuts are possible__.
-
   
 The genotype landscape is rich in tools which may be combined in a myriad of ways
 that consume and produce a few well defined standard formats: FASTA, FASTQ, VCF etc.
  
 Before the phenotype tool landscape can become as rich,
-well defined standard interchange formats which limit computational complexity are necessary.
+well defined standard interchange formats which limit computational complexity
+are necessary.
 
 --------------------------------------------------------------
 ## On Graph Structure
@@ -66,8 +70,11 @@ but from an open exchange format viewpoint, are similar to each other.
 - Accountability requires an exchanged artifact be preserved forever unchanged.
 
 
-Proper [identifier discipline]() will help with both,
-but those issues are in the domain of the repository using the open exchange format which only needs to avoid interfering with whatever policy the repository chooses without insisting all repositories adhere to the same policy.
+Proper [identifier discipline](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2001414) will help with both,
+but those issues are in the domain of the repository using the
+open exchange format which only needs to avoid interfering with
+whatever policy the repository chooses without insisting all repositories
+adhere to the same policy.
 
 Uniform metadata must be supported, but not uniformly required.
 
@@ -139,18 +146,20 @@ Leaf nodes are used to carry (external) data
 
 
 We can not know all of the leaf/data node values in advance,
-but we can and must externally predefine, label and type every internal node and edge.
+but we can and must externally predefine,
+label and type every internal node and edge.
 
 
 Explicitly noting here that
 an internal node may only exist exactly once in a tree,
-and leaf nodes which may be data, are outside our control may contain duplicate values. 
+and leaf nodes which may be data, are outside our control
+may contain duplicate values. 
 
 Directed rooted trees can also be seen as unordered lists of unordered lists.
 
 These unordered lists could be quite arbitrary but if we limit ourselves
 to a simple repeatable pattern they become more predictable which is important
-when reading, writing and verifying.
+for ease and efficiency when reading, writing and verifying.
 
 The simplest structural pattern I believe could suffice is
 one which could model of a deck of flash cards where
@@ -195,7 +204,7 @@ depending on your background this may sound like:
  - a list of records
  - a trivial pursuit
  
-Or a number of other phrases, many names for a useful concept.
+Or any number of other phrases, many names for a useful concept.
 
 This simple pattern is useful as a building block
 in a more complex model when we allow a leaf (_value_) of one building block
@@ -204,14 +213,15 @@ the become the root (`envelope`) of another building block.
 With the deck of flash cards analogy;  
 The answer on one of the first deck's card would be to switch to a different deck.
 
-The only strict rule is: a 'deck' may only appear exactly once
+The only strict rule would ne: a 'deck' may only appear exactly once
 on any branch of the tree.
 I suspect a more sensible rule is the generalization:
 a deck should only exist once in a tree.
 
 
-note: the generic terms `envelope` and `item` here are just stand in's
-for the more loaded terms  
+note: the generic terms deck & card, or `envelope` & `item`
+used interchangably here are just stand ins
+for more loaded terms such as  
 [collection, container, list, array, series ,sequence, set, bag, ... ]  
 and
 [class, record, map, dictionary, associative array, ... ]  
@@ -221,13 +231,13 @@ either more or less than I intend at the moment.
 What is important is an outer construct loosely associating
 inner constructs containing tight associations. 
 
-A tree of four levels is relatively short,
-computationally not too expensive and they look nice, they are shrubs.
+## On Graph Meaning
 
-## On Graph Meaning 
+ 
 
 As each internal node needs to be unique within the tree,
-a node could be given a pseudo random identifier/label based on the path to its root
+a node could be given a pseudo random identifier/label
+based on the path to its root,
 but there is also the opportunity for
 
  - all non-leaf nodes
@@ -248,7 +258,7 @@ As more specific patterns become necessary we must adopt or if necessary create
 carefully describe the patterns we are expressing in a way that allows them
 to meaningfully interact in a mechanistic way with other unknown patterns. 
 
-Some core elements  of RDF which are applicable to every internal
+Some core elements of RDF which are applicable to every internal
 node and many leaf nodes regardless of the domain are:  
 
  - `rdf:type`  which identifies the concept/resource in an external ontology
@@ -260,8 +270,8 @@ node and many leaf nodes regardless of the domain are:
 Although the concepts thus far are broadly applicable
 for Semantic Exchanges the use case I need to focus on is
 biomedical phenotypes and related concepts including genotype, environments, substances etc.
-so the ontologies I will refer to are mainly [Open Biomedical Ontologies](http://www.obofoundry.org/)
-(OBO) 
+so the ontologies I will refer to are mainly
+[Open Biomedical Ontologies](http://www.obofoundry.org/)(OBO) 
 
 
 ## Summary
@@ -269,7 +279,7 @@ so the ontologies I will refer to are mainly [Open Biomedical Ontologies](http:/
 Semantic (sub)graph exchange is a thorny problem.
 Limiting our exchange structure to a particular (fractal) tree pattern
 can, when combined with others, result in a complex
-but relativity tractable Directed Acyclic Graph.
+but relativity tractable Directed Acyclic Graphs.
 
 Insisting our directed rooted trees are structured as a
 "list of records" which allows the _value_ of a record's field
@@ -278,10 +288,15 @@ artifacts from being full graphs with their associated costs.
 This comes with the expense of sometimes needing to place
 the same datum as a leaf in more than one branch or tree.
 And, depending on the implementation,
-may require circularity checks on collections which are values.
+may require circularity checks on values which are themselves new collections.
 
-Leveraging the Semantic Web's definitions for common, higher level constructs,
-and metadata standards 
+Leveraging existing Semantic Web's definitions to provide context for common,
+higher level constructs, and to provide a standard metadata format is prudent
+and enables an immediate base level of interoperatibility   
+
+A tree of only four levels is pretty short,
+computationally not too expensive, and they look nice,
+they are shrubs.
 
 --------------------------------------------------------------
 # Phenopackets now
