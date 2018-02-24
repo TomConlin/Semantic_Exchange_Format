@@ -327,16 +327,23 @@ the node you want.
 
 Obvious process is scan the collection of paths for nodes
 which are in the set of what we have, then  
-for each path found, if the node we want is in that path,
-we have found as olution
+for each path found, if the node we want is in the path,
+we have found a 'way' to an answer
 
 If not, nodes in the path (sans nodes seen) become
 the set of nodes we have, and the proecss repeats.
 
-If we run out of nodes, then we to not have an answer.
+If we run out of nodes, then we do not have an answer.
+
+This of course is the simplest case, more likely
+there are constraints on the direction nodes in a path are found,
+and more expensive, may only except a path if a valid DAG
+can be assembed including the trees the 'way' is found within.
 
 
---------------------------------------------------------------
+
+
+----------------------------------------------------------
 # Phenopackets now
 
 Abstractly a phenopacket is:    
