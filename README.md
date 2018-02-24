@@ -25,7 +25,7 @@ requiring a graph/network representation.
 Graph algorithms are of a higher order of complexity than list algorithms,
 some graph algorithm have no known efficient solutions including 
 the simple sounding "_Is this graph within that graph?_"
-(see: [Subgraph isomorphism problem](https://en.wikipedia.org/wiki/Subgraph_isomorphism_problem)
+(see: [Subgraph isomorphism problem](https://en.wikipedia.org/wiki/Subgraph_isomorphism_problem))
 
 Short of a world changing breakthrough in Mathematics
 (see: [P versus NP problem](https://en.wikipedia.org/wiki/P_versus_NP_problem))
@@ -88,7 +88,7 @@ So not allowing anything which is not necessary is the clear path.
 
 Deciding what is necessary will be different and growing problem
 but to begin with, the simplest thing that could possibly work is
-what I am aiming for
+what I am aiming for.
 
 
 From [Wikipedia](https://en.wikipedia.org/wiki/Graph_\(discrete_mathematics\))
@@ -102,10 +102,12 @@ a graph is a structure amounting to a set of objects
  is called an edge (also called an arc or line)
 ```
 
-I am using the terms `nodes` and `edges` as the components which make a `graph`.
+I am using the terms `nodes` and `edges` as the components which make a `graph`,
+and assuming no degenerate cases such as disconnected nodes or edges.
 
-All graphs are not created equal and the more constraints a graph has
-the easier it becomes to work with.
+
+All graphs are not created equal, and with the right constraints a graph becomes
+much easier to work with.
 
 Several constraints to make graph processing easier
 
@@ -122,17 +124,21 @@ see one twice because you are in an infinite loop.
  
 It is only quasi true because if we allow the same node
 be shared by different graphs then, __when combined__,
-there will be one incoming edge from each of the different graphs
-which is what we want.
+there may be one incoming edge from each of the different graphs
+the node belongs to which is exactly what we want.
 
-With these three constraints we have simplified graphs in general into
+With these three constraints we have simplified general graphs into
 [directed rooted trees](https://en.wikipedia.org/wiki/Tree_\(graph_theory\))
-which are far more computable than complete graphs and are still fairly expressive
+which are far more computable than complete graphs and still fairly expressive
 especially when these trees are allowed to overlap  
 (have nodes other than the root node in common),
 because they form a
 [directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph)
 which is often the sweet spot in complexity between modeling and computing.
+
+Note: a `tree` _is_  a `graph` just one that is constrained to have exactly
+one fewer edges than nodes. So as we talk about trees, we are just talking about
+simple graphs. 
 
 Nodes in a tree are of three types,
 
@@ -142,7 +148,7 @@ Nodes in a tree are of three types,
 
 Being a rooted tree guarantees exactly one node without incoming edges  
 Interior nodes provide structure to determine how leaf nodes are grouped.  
-Leaf nodes are used to carry (external) data
+Leaf nodes are used to carry external data and types. 
 
 
 We can not know all of the leaf/data node values in advance,
@@ -150,10 +156,8 @@ but we can and must externally predefine,
 label and type every internal node and edge.
 
 
-Explicitly noting here that
-an internal node may only exist exactly once in a tree,
-and leaf nodes which may be data, are outside our control
-may contain duplicate values. 
+Explicitly noteing here that a node may only exist exactly once
+on any path in a tree. 
 
 Directed rooted trees can also be seen as unordered lists of unordered lists.
 
@@ -165,39 +169,41 @@ The simplest structural pattern I believe could suffice is
 one which could model of a deck of flash cards where
 cards in the deck are generally related by having a similar theme.
 and questions one the front of each card are exactly related to answers
-on the back of the same card. This pattern forms a hierarchy four levels deep:
-(deck, card, front, back).  
+on the back of the same card. This pattern forms a hierarchy four-ish levels deep:
+deck, card, front_question, back_answer,  (and possibly types, think color coded).
 A deck may have many cards and each card many have many questions and answers.
 
 
-- envelope
-  - item_a
-     - key_1
-          - _value_
-     - key_3
-          - _value_
-     - key_2
-          - _value_
-  - item_c        
-     - key_1
-          - _value_
-     - key_2
-          - _value_
-     - key_3
-          - _value_
-  - item_b
-     - key_2
-         - _value_
-     - key_3
-         - _value_
-     - key_1
-         - _value_
+- Deck
+  - Card_a
+     - Question_1
+          - _Answer1_
+     - Question_3
+          - _Answer3_
+     - Question_2
+          - _Answer2_
+  - Card_c        
+     - Question_1
+          - _Answer1_
+     - Question_2
+          - _Answer2_
+     - Question_3
+          - _Answer2_
+  - Card_b
+     - Question_2
+         - _Answer2_
+     - Question_3
+         - _Answer3_
+     - Question_1
+         - _Answer1_
 
-where all the `items` (rdfs:Class) in a `envelope` (rdfs:Container)
-share a set of `keys` (rdf:Property) which may be associated with _values_
-which have an (rdf:type) or a datatype if they are `Plain Literal`.
+where the `Card`s (rdfs:Class) in a `Deck` (rdfs:Container)
+may share `Question`s (rdf:Property) which are associated with _Answers_
 
-depending on your background this may sound like:
+Although not explicity shown here _values_ should be typed (rdf:type)
+or depending on the encoding, have an integrated datatype if they are `Plain Literal` values.
+
+Depending on your background this may sound like:
 
  - a set of bijections
  - an array of dictionaries
@@ -207,16 +213,16 @@ depending on your background this may sound like:
 Or any number of other phrases, many names for a useful concept.
 
 This simple pattern is useful as a building block
-in a more complex model when we allow a leaf (_value_) of one building block
-the become the root (`envelope`) of another building block.
+in a more complex model when we allow a leaf (_Answer_) of one building block
+the be the root (`Deck`) of another building block.
 
 With the deck of flash cards analogy;  
 The answer on one of the first deck's card would be to switch to a different deck.
 
-The only strict rule would ne: a 'deck' may only appear exactly once
+The only strict rule would be: a 'Deck' may only appear exactly once
 on any branch of the tree.
 I suspect a more sensible rule is the generalization:
-a deck should only exist once in a tree.
+that a deck should only exist once in given a tree.
 
 
 note: the generic terms deck & card, or `envelope` & `item`
@@ -235,9 +241,9 @@ inner constructs containing tight associations.
 
  
 
-As each internal node needs to be unique within the tree,
-a node could be given a pseudo random identifier/label
-based on the path to its root,
+As each internal node needs to be uniquely identified within the tree,
+a node is easily be given a pseudo random identifier/label
+based on the path from the root,
 but there is also the opportunity for
 
  - all non-leaf nodes
@@ -245,6 +251,9 @@ but there is also the opportunity for
  - all edges
  
 to have well established context.
+That is: everything which is not external data comes from and with
+globaly shared, commonly accepted, referable, predefined, definitions,
+and usage patterns.   
 
 If these predefined patterns are drawn from well established libraries
 of patterns then graph fragments from unrelated sources may
@@ -262,15 +271,14 @@ Some core elements of RDF which are applicable to every internal
 node and many leaf nodes regardless of the domain are:  
 
  - `rdf:type`  which identifies the concept/resource in an external ontology
- - `rdfs:label`  for a human readable string for the concept/resource  
-   (only a convenience, the ontology label takes precedence).
+ - `rdfs:label` (convenience) short human readable string for the concept/resource  
  - `rdfs:comment` optional for longer human readable descriptions.
 
 
 Although the concepts thus far are broadly applicable
 for Semantic Exchanges the use case I need to focus on is
 biomedical phenotypes and related concepts including genotype, environments, substances etc.
-so the ontologies I will refer to are mainly
+so the ontologies I will refer to are mainly from
 [Open Biomedical Ontologies](http://www.obofoundry.org/)(OBO) 
 
 
@@ -282,11 +290,11 @@ can, when combined with others, result in a complex
 but relativity tractable Directed Acyclic Graphs.
 
 Insisting our directed rooted trees are structured as a
-"list of records" which allows the _value_ of a record's field
+"list of records" which allows the typed _value_ of a record's field
 to be another "list of records" is a viable way of keeping exchanged
 artifacts from being full graphs with their associated costs. 
 This comes with the expense of sometimes needing to place
-the same datum as a leaf in more than one branch or tree.
+the same datum in more than one branch or tree.
 And, depending on the implementation,
 may require circularity checks on values which are themselves new collections.
 
@@ -294,9 +302,39 @@ Leveraging existing Semantic Web's definitions to provide context for common,
 higher level constructs, and to provide a standard metadata format is prudent
 and enables an immediate base level of interoperatibility   
 
-A tree of only four levels is pretty short,
+A tree of only four-ish levels is pretty short,
 computationally not too expensive, and they look nice,
 they are shrubs.
+
+
+
+## On Paths
+
+A `path` in a graph is an alternating sequence of nodes and edges.
+In the directed rooted trees proposed here, there is
+exactly one path from the root node to each leaf node.
+Furthermore, unlike the shrubs themselves which are
+unordered lists of unordered lists,
+the set of all paths in a tree is
+a single unordered list of distinctly ordered lists.
+
+A collection of trees (forest) may have their sets of paths
+(ordered lists) all collected together.
+
+An answer to a question may be seen as finding a way through
+the forest that begins with the node you have and ends with
+the node you want.
+
+Obvious process is scan the collection of paths for nodes
+which are in the set of what we have, then  
+for each path found, if the node we want is in that path,
+we have found as olution
+
+If not, nodes in the path (sans nodes seen) become
+the set of nodes we have, and the proecss repeats.
+
+If we run out of nodes, then we to not have an answer.
+
 
 --------------------------------------------------------------
 # Phenopackets now
