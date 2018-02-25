@@ -200,15 +200,15 @@ A deck may have many cards and each card many have many questions and answers.
 where the `Card`s (rdfs:Class) in a `Deck` (rdfs:Container)
 may share `Question`s (rdf:Property) which are associated with _Answers_
 
-Although not explicity shown here _values_ should be typed (rdf:type)
-or depending on the encoding, have an integrated datatype if they are `Plain Literal` values.
+Although not explicity shown here _Answers_ should be typed (rdf:type)
+or depending on the encoding, may have an integrated datatype if they are `Plain Literal` values.
 
 Depending on your background this may sound like:
 
  - a set of bijections
  - an array of dictionaries
  - a list of records
- - a trivial pursuit
+ - a trivial pursuit deck
  
 Or any number of other phrases, many names for a useful concept.
 
@@ -225,8 +225,7 @@ I suspect a more sensible rule is the generalization:
 that a deck should only exist once in given a tree.
 
 
-note: the generic terms deck & card, or `envelope` & `item`
-used interchangably here are just stand ins
+note: the generic terms `Deck` & `Card` are just stand ins
 for more loaded terms such as  
 [collection, container, list, array, series ,sequence, set, bag, ... ]  
 and
@@ -237,10 +236,10 @@ either more or less than I intend at the moment.
 What is important is an outer construct loosely associating
 inner constructs containing tight associations. 
 
+
 ## On Graph Meaning
 
  
-
 As each internal node needs to be uniquely identified within the tree,
 a node is easily be given a pseudo random identifier/label
 based on the path from the root,
@@ -282,32 +281,6 @@ so the ontologies I will refer to are mainly from
 [Open Biomedical Ontologies](http://www.obofoundry.org/)(OBO) 
 
 
-## Summary
-
-Semantic (sub)graph exchange is a thorny problem.
-Limiting our exchange structure to a particular (fractal) tree pattern
-can, when combined with others, result in a complex
-but relativity tractable Directed Acyclic Graphs.
-
-Insisting our directed rooted trees are structured as a
-"list of records" which allows the typed _value_ of a record's field
-to be another "list of records" is a viable way of keeping exchanged
-artifacts from being full graphs with their associated costs. 
-This comes with the expense of sometimes needing to place
-the same datum in more than one branch or tree.
-And, depending on the implementation,
-may require circularity checks on values which are themselves new collections.
-
-Leveraging existing Semantic Web's definitions to provide context for common,
-higher level constructs, and to provide a standard metadata format is prudent
-and enables an immediate base level of interoperatibility   
-
-A tree of only four-ish levels is pretty short,
-computationally not too expensive, and they look nice,
-they are shrubs.
-
-
-
 ## On Paths
 
 A `path` in a graph is an alternating sequence of nodes and edges.
@@ -342,8 +315,38 @@ can be assembed including the trees the 'way' is found within.
 
 
 
+## Summary
 
-----------------------------------------------------------
+Semantic (sub)graph exchange is a thorny problem.
+Limiting our exchange structure to a particular (fractal) tree pattern
+can, when combined with others, result in a complex
+but relativity tractable Directed Acyclic Graphs.
+
+Insisting our directed rooted trees are structured as a
+"list of records" which allows the typed _value_ of a record's field
+to be another "list of records" is a viable way of keeping exchanged
+artifacts from being full graphs with their associated costs. 
+This comes with the expense of sometimes needing to place
+the same datum in more than one branch or tree.
+And, depending on the implementation,
+may require circularity checks on values which are themselves new collections.
+
+Leveraging existing Semantic Web's definitions to provide context for common,
+higher level constructs, and to provide a standard metadata format is prudent
+and enables an immediate base level of interoperatibility.
+
+Trees may be linearized into paths which are ordered sequences of nodes
+which may be operated on with some of the same algorithms
+bioinformatics developed for various other sequences.
+
+A tree of only four-ish levels is pretty short,
+computationally not too expensive, and they look nice,
+they are shrubs.
+
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
 # Phenopackets now
 
 Abstractly a phenopacket is:    
