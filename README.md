@@ -6,7 +6,21 @@ _hence: may still be too simple at a given point_
  
 ## Structural Problem
 
-Phenotype data lacks a well defined standard exchange format
+Semantic graph data exchange has a low level format in RDF that converse in edges
+and allow any graph(s) to be represented whether they make sense or not.
+
+Semantic graph data exchange has high level format in Web ontology Language (OWL)
+which tend to be large and complicated as they are used to represent
+a large problem space all at once. 
+
+What is lacking is an intermediate scale structure between "RDF's just edges"
+and the superposition of all graph fragments expressed as a commitee
+designed language. An structure that fits easily in the users mind
+with room to spare for the problem they are actually trying to solve.  
+
+
+
+
 
 Phenotype data is profoundly different than genotype data.
 Bioinformatics already has a decent handle on genotype data.
@@ -256,7 +270,7 @@ and usage patterns.
 
 If these predefined patterns are drawn from well established libraries
 of patterns then graph fragments from unrelated sources may
-overlap in a meaningful way.
+overlap in a meaningful way despite the data having nothing specific in common.
 
 A good source for the most generic of these predefined patterns is the
 [W3C Resource Description Framework](https://en.wikipedia.org/wiki/Resource_Description_Framework)
