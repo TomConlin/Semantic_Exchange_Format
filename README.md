@@ -6,35 +6,47 @@ _hence: may still be too simple at a given point_
  
 ## Structural Problem
 
-Semantic graph data exchange has a low level format in RDF that converse in edges
-and allow any graph(s) to be represented whether they make sense or not.
+Semantic graph exchange has a low level format in Resource Discription Format
+([RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework))
+which communicates at the levle of edges which allow any graph to be represented.
+This includes graphs which are nonsense or intractable.
 
-Semantic graph data exchange has high level format in Web ontology Language (OWL)
-which tend to be large and complicated as they are used to represent
-a large problem space all at once. 
+Semantic graph exchange has a high level format in Web Ontology Language
+([OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language)) which represents our
+best effort at formaly describing anything and everything at the same time
+while still allowing for things not said yet. When implemented correctly
+it works remarkably well allowing mechanical reasoning a humans could never
+cover as well. But even at its most tractable OWL file benifits from special
+[tooling](https://protege.stanford.edu/) to author or even view. 
+
 
 What is lacking is an intermediate scale structure between "RDF's just edges"
-and the superposition of all graph fragments expressed as a commitee
-designed language. An structure that fits easily in the users mind
-with room to spare for the problem they are actually trying to solve.  
+and the superposition of all possible graph fragments from your model
+expressed in a designed by commitee language. A structure that fits trivially
+in the users mind with room to spare for the problem they are actually
+trying to solve. A simple composable structure which can be vetted in isolation
+before being assembled with any number of similar structures
+where again the structure of structures may be sanity checked.
 
 
+Before we go on, I am not debating the merits or sutibility of the various
+transport formats or serializing protocols. I don't care, whatever wins
+is fine by me, switching between encodings is a solved problem. 
 
-
+I am however wanting to impose constraints on the big picture,
+eliminating general graphs from consideration. My reasons follow. 
 
 Phenotype data is profoundly different than genotype data.
 Bioinformatics already has a decent handle on genotype data.
 Genotype data is basically ordered linear lists (DNA RNA genes proteins ...)
-algorithms for working with lists are well behaved and
-only incremental improvements may be expected in the general case.
+algorithms for working with ordered lists are tractable and well behaved.
+Only incremental improvements may be expected in the general case.
 
 Capturing Phenotypes requires a branching data structure to describe entities
-and related features where the order of the relationships is strictly arbitrary. 
+and related features where the order between the relationships is strictly arbitrary.
 
-Although I am currently motivated by phenotypes in particular, the
-thoughts in this document should be applicable to many other domains
-requiring a graph/network representation.
- 
+Although I am motivated by phenotypes in particular, my hope is this document
+may be applicable to other domains requiring a graph/network representation.
 
 Graph algorithms are of a higher order of complexity than list algorithms,
 some graph algorithm have no known efficient solutions including 
@@ -44,30 +56,40 @@ the simple sounding "_Is this graph within that graph?_"
 Short of a world changing breakthrough in Mathematics
 (see: [P versus NP problem](https://en.wikipedia.org/wiki/P_versus_NP_problem))
 we need to limit the structure and content of our graph representations to ensure
-that valid, simplifying, assumptions may be made by our algorithms if they are to scale.
+that valid, simplifying, assumptions may be made by our algorithms
+if they are to scale along with genomic sequence data.
 
-The Computer Science background links included in this document are here
-to convey the magnitude of the issue and necessity of these proposed constraints.    
+The Computer Science background links included in this document are here to
+convey the magnitude of the issue and necessity of the proposed constraints.
 However, one need not closely follow the math and jargon to appreciate that
-neither seventy years of brilliant minds nor a million dollar prizes
-have produced solutions to the fundamental problem,
+neither seventy years of brilliant minds nor million dollar prizes have
+produced solutions to the fundamental problem,
 which lends weight to the importance of  
 __an exchange format that guarantees shortcuts are possible__.
   
-The genotype landscape is rich in tools which may be combined in a myriad of ways
-that consume and produce a few well defined standard formats: FASTA, FASTQ, VCF etc.
+The genotype landscape is rich in tools which may be combined in a myriad of ways,
+each consume and produce a few well defined standard formats: FASTA, FASTQ, VCF etc.
  
-Before the phenotype tool landscape can become as rich,
-well defined standard interchange formats which limit computational complexity
-are necessary.
+Before the phenotype tool landscape can become as rich, well defined standard
+interchange formats which limit computational complexity are necessary.
 
 --------------------------------------------------------------
-## On Graph Structure
-     
-Any solution to the above problem will address the points below.
+## Metadata Policy 
 
-Phenotype information exchanges have different use cases
-which have conflicting requirements. These include
+Intertwined with structural/mathematical issues are important
+considerations which require accommodation in practice.
+
+Metadata issues surounding history, responsibility, permissions etc.
+may vary between non-existant in the case of student experimenting
+and critical in a reputable clinical repository. 
+ 
+
+
+
+
+Information exchanges have different use cases
+which have conflicting requirements.
+These may (or may not) include:  
 
 
  - mutability (merge, split, change)
@@ -92,6 +114,9 @@ adhere to the same policy.
 
 Uniform metadata must be supported, but not uniformly required.
 
+
+
+## On Graph Structure
 
 Computability and expressiveness are less nuanced
 on one hand you have to be able to communicate something useful
