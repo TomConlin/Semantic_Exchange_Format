@@ -6,35 +6,41 @@ _hence: may still be too simple at a given point_
  
 ## Structural Problem
 
-Semantic graph exchange has a low level format in Resource Discription Format
+Semantic graph exchange has a low level format in Resource Description Format
 ([RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework))
-which communicates at the levle of edges which allow any graph to be represented.
+which communicates at the level of __edges__ which allow any graph to be
+represented.
 This includes graphs which are nonsense or intractable.
 
 Semantic graph exchange has a high level format in Web Ontology Language
-([OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language)) which represents our
-best effort at formaly describing anything and everything at the same time
-while still allowing for things not said yet. When implemented correctly
-it works remarkably well allowing mechanical reasoning a humans could never
-cover as well. But even at its most tractable OWL file benifits from special
+([OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language)) which is
+a formal, committee specified [Description Logic](https://en.wikipedia.org/wiki/Description_logic)
+language for representing anything logically describable.
+That is OWL communicates the full conceptual graph and
+what may be done with it simultaneously.
+When implemented correctly it works remarkably well,
+allowing mechanical reasoning humans could never cover as well.
+But even at its most tractable, an OWL file benefits from special
 [tooling](https://protege.stanford.edu/) to author or even view. 
 
 
 What is lacking is an intermediate scale structure between "RDF's just edges"
-and the superposition of all possible graph fragments from your model
-expressed in a designed by commitee language. A structure that fits trivially
-in the users mind with room to spare for the problem they are actually
-trying to solve. A simple composable structure which can be vetted in isolation
-before being assembled with any number of similar structures
-where again the structure of structures may be sanity checked.
+and the superposition of all possible graph fragments from your model.
+A structure that fits trivially in the users mind with room to spare for
+the problem they are actually trying to solve. A simple composable structure
+which can be vetted in isolation before being assembled with any number of
+similar structures where again the structure of structures may be incrementally
+sanity checked.
 
 
-Before we go on, I am not debating the merits or sutibility of the various
+Before we go on, I am not debating the merits or suitability of the various
 transport formats or serializing protocols. I don't care, whatever wins
 is fine by me, switching between encodings is a solved problem. 
 
 I am however wanting to impose constraints on the big picture,
-eliminating general graphs from consideration. My reasons follow. 
+eliminating graphs more complex than directed acyclic from consideration,
+and insisting graphs are built up from a single repeated tree pattern.  
+My reasons follow. 
 
 Phenotype data is profoundly different than genotype data.
 Bioinformatics already has a decent handle on genotype data.
@@ -43,7 +49,8 @@ algorithms for working with ordered lists are tractable and well behaved.
 Only incremental improvements may be expected in the general case.
 
 Capturing Phenotypes requires a branching data structure to describe entities
-and related features where the order between the relationships is strictly arbitrary.
+and related features where the order between the relationships is strictly
+arbitrary.
 
 Although I am motivated by phenotypes in particular, my hope is this document
 may be applicable to other domains requiring a graph/network representation.
@@ -62,64 +69,24 @@ if they are to scale along with genomic sequence data.
 The Computer Science background links included in this document are here to
 convey the magnitude of the issue and necessity of the proposed constraints.
 However, one need not closely follow the math and jargon to appreciate that
-neither seventy years of brilliant minds nor million dollar prizes have
-produced solutions to the fundamental problem,
+neither fifty years of brilliant minds nor million dollar prizes have
+produced solutions to the fundamental problems,
 which lends weight to the importance of  
 __an exchange format that guarantees shortcuts are possible__.
   
-The genotype landscape is rich in tools which may be combined in a myriad of ways,
-each consume and produce a few well defined standard formats: FASTA, FASTQ, VCF etc.
+The genotype landscape is rich in tools which may be combined
+in a myriad of ways, each consume and produce a few well defined
+standard formats: FASTA, FASTQ, VCF etc.
  
 Before the phenotype tool landscape can become as rich, well defined standard
 interchange formats which limit computational complexity are necessary.
 
 --------------------------------------------------------------
-## Metadata Policy 
-
-Intertwined with structural/mathematical issues are important
-considerations which require accommodation in practice.
-
-Metadata issues surounding history, responsibility, permissions etc.
-may vary between non-existant in the case of student experimenting
-and critical in a reputable clinical repository. 
- 
-
-
-
-
-Information exchanges have different use cases
-which have conflicting requirements.
-These may (or may not) include:  
-
-
- - mutability (merge, split, change)
- - accountability (attribution, provenance, history)
- - computability
- - expressiveness
- - aggregation
-
-Mutability and accountability are vaguely opposites,
-but from an open exchange format viewpoint, are similar to each other.
-
-- Mutability allows exchanged artifacts to become more complete/correct over time.
-
-- Accountability requires an exchanged artifact be preserved forever unchanged.
-
-
-Proper [identifier discipline](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2001414) will help with both,
-but those issues are in the domain of the repository using the
-open exchange format which only needs to avoid interfering with
-whatever policy the repository chooses without insisting all repositories
-adhere to the same policy.
-
-Uniform metadata must be supported, but not uniformly required.
-
-
 
 ## On Graph Structure
 
-Computability and expressiveness are less nuanced
-on one hand you have to be able to communicate something useful
+Computability and expressiveness are less nuanced than the policy issues to come.
+On one hand you have to be able to communicate something useful
 and on the other hand every bit of flexibility in expression allowed reduces
 the scale achievable.
 
@@ -148,14 +115,14 @@ and assuming no degenerate cases such as disconnected nodes or edges.
 All graphs are not created equal, and with the right constraints a graph becomes
 much easier to work with.
 
-Several constraints to make graph processing easier
+Several constraints to make graph processing easier:
 
 - Make edges one way (directed), this imposes a [partial order](https://en.wikipedia.org/wiki/Partially_ordered_set) to the nodes.
 
 - No cycles of edges.
 without this constraint when traversing a graph you need
 to keep track every node you have visited and stop if you
-see one twice because you are in an infinite loop.
+see one twice because you are in an infinite loop. 
 
 (This next one is only quasi true:)
   
@@ -164,7 +131,7 @@ see one twice because you are in an infinite loop.
 It is only quasi true because if we allow the same node
 be shared by different graphs then, __when combined__,
 there may be one incoming edge from each of the different graphs
-the node belongs to which is exactly what we want.
+the node belongs to, which is exactly what we want.
 
 With these three constraints we have simplified general graphs into
 [directed rooted trees](https://en.wikipedia.org/wiki/Tree_\(graph_theory\))
@@ -177,11 +144,11 @@ which is often the sweet spot in complexity between modeling and computing.
 
 Note: a `tree` _is_  a `graph` just one that is constrained to have exactly
 one fewer edges than nodes. So as we talk about trees, we are just talking about
-simple graphs. 
+deliberately simplified graphs. 
 
 Nodes in a tree are of three types,
 
-- no edges coming in           (root node)
+- no edges coming in            (root node)
 - edges coming in and going out (interior node)
 - no edges going out            (leaf node)
 
@@ -193,10 +160,6 @@ Leaf nodes are used to carry external data and types.
 We can not know all of the leaf/data node values in advance,
 but we can and must externally predefine,
 label and type every internal node and edge.
-
-
-Explicitly noteing here that a node may only exist exactly once
-on any path in a tree. 
 
 Directed rooted trees can also be seen as unordered lists of unordered lists.
 
@@ -236,16 +199,21 @@ A deck may have many cards and each card many have many questions and answers.
      - Question_1
          - _Answer1_
 
-where the `Card`s (rdfs:Class) in a `Deck` (rdfs:Container)
-may share `Question`s (rdf:Property) which are associated with _Answers_
+where the `Card`s  in a `Deck` may share `Question`s which are
+associated with _Answers_.  
+In practice  I expect decks and perhaps cards
+may have attendent fields such as  
+ - ID  
+ - type  
+ - label  
 
-Although not explicity shown here _Answers_ should be typed (rdf:type)
-or depending on the encoding, may have an integrated datatype if they are `Plain Literal` values.
+Although not explicitly shown here _Answers_ should be typeable.
+
 
 Depending on your background this may sound like:
 
  - a set of bijections
- - an array of dictionaries
+ - an array of structures
  - a list of records
  - a trivial pursuit deck
  
@@ -254,9 +222,10 @@ Or any number of other phrases, many names for a useful concept.
 This simple pattern is useful as a building block
 in a more complex model when we allow a leaf (_Answer_) of one building block
 the be the root (`Deck`) of another building block.
+(Note: we do not allow new decks to appear anywhere but as a root or leaf)
 
 With the deck of flash cards analogy;  
-The answer on one of the first deck's card would be to switch to a different deck.
+The answer on one of the first Deck's card would be to switch to a different deck.
 
 The only strict rule would be: a 'Deck' may only appear exactly once
 on any branch of the tree.
@@ -290,7 +259,7 @@ but there is also the opportunity for
  
 to have well established context.
 That is: everything which is not external data comes from and with
-globaly shared, commonly accepted, referable, predefined, definitions,
+globally shared, commonly accepted, referable, predefined, definitions,
 and usage patterns.   
 
 If these predefined patterns are drawn from well established libraries
@@ -315,7 +284,8 @@ node and many leaf nodes regardless of the domain are:
 
 Although the concepts thus far are broadly applicable
 for Semantic Exchanges the use case I need to focus on is
-biomedical phenotypes and related concepts including genotype, environments, substances etc.
+biomedical phenotypes and related concepts including genotype,
+environments, substances etc.
 so the ontologies I will refer to are mainly from
 [Open Biomedical Ontologies](http://www.obofoundry.org/)(OBO) 
 
@@ -324,11 +294,12 @@ so the ontologies I will refer to are mainly from
 
 A `path` in a graph is an alternating sequence of nodes and edges.
 In the directed rooted trees proposed here, there is
-exactly one path from the root node to each leaf node.
-Furthermore, unlike the shrubs themselves which are
+exactly one path from the root node to each and every leaf node.
+Furthermore, unlike these short trees themselves which are
 unordered lists of unordered lists,
 the set of all paths in a tree is
-a single unordered list of distinctly ordered lists.
+a single unordered list of distinctly ordered lists, where the
+order comes from the constraint of using directed edges.  
 
 A collection of trees (forest) may have their sets of paths
 (ordered lists) all collected together.
@@ -343,21 +314,65 @@ for each path found, if the node we want is in the path,
 we have found a 'way' to an answer
 
 If not, nodes in the path (sans nodes seen) become
-the set of nodes we have, and the proecss repeats.
+the set of nodes we have, and the process repeats.
 
 If we run out of nodes, then we do not have an answer.
 
 This of course is the simplest case, more likely
 there are constraints on the direction nodes in a path are found,
 and more expensive, may only except a path if a valid DAG
-can be assembed including the trees the 'way' is found within.
+can be assembled including the trees the 'way' is found within.
 
 
+## Metadata Policy 
+
+Intertwined with structural/mathematical issues are important
+considerations which require accommodation in practice.
+
+Metadata issues surrounding history, responsibility, permissions etc.
+may vary between non-existent in the case of student experimenting
+and critical in a reputable clinical repository. 
+ 
+Information exchanges have different use cases
+which have conflicting requirements.
+These may (or may not) include:  
+
+
+ - mutability (merge, split, change)
+ - accountability (attribution, provenance, history)
+ - computability
+ - expressiveness
+ - aggregation
+
+Mutability and accountability are vaguely opposites,
+but from an open exchange format viewpoint, are similar to each other.
+
+- Mutability allows exchanged artifacts to become more complete/correct over time.
+
+- Accountability requires an exchanged artifact be preserved forever unchanged.
+
+
+Proper [identifier discipline](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.2001414) will help with both,
+but those issues are in the domain of the repository using the
+open exchange format which only needs to avoid interfering with
+whatever policy the repository chooses without insisting all repositories
+adhere to the same policy.
+
+Uniform metadata must be supported, but not uniformly required.
+
+
+## Theory
+
+A proponent of [Catagory Theory](https://en.wikipedia.org/wiki/Category_theory)
+stated that as outlined to them, these structures maintain
+the key properties of [OLOG](https://en.wikipedia.org/wiki/Olog)s.
+Which would be reasuring conclusion having approached it from a purely pratical 
+point of view.
 
 ## Summary
 
 Semantic (sub)graph exchange is a thorny problem.
-Limiting our exchange structure to a particular (fractal) tree pattern
+Limiting our exchange structure to a particular (composable) tree pattern
 can, when combined with others, result in a complex
 but relativity tractable Directed Acyclic Graphs.
 
@@ -372,7 +387,7 @@ may require circularity checks on values which are themselves new collections.
 
 Leveraging existing Semantic Web's definitions to provide context for common,
 higher level constructs, and to provide a standard metadata format is prudent
-and enables an immediate base level of interoperatibility.
+and enables an immediate base level of interoperability.
 
 Trees may be linearized into paths which are ordered sequences of nodes
 which may be operated on with some of the same algorithms
@@ -381,138 +396,3 @@ bioinformatics developed for various other sequences.
 A tree of only four-ish levels is pretty short,
 computationally not too expensive, and they look nice,
 they are shrubs.
-
-
-
--------------------------------------------------------------------------
--------------------------------------------------------------------------
-# Phenopackets now
-
-Abstractly a phenopacket is:    
-
-A set of associated statments which conform to a preexisting structure.
-
-## Concretely  a phenopacket is
-
-A versioned fragment of a knowledge graph structured according
-to semantic web and resource description framework (RDF) constraints. 
-
-Addional constrains limit the structure of each fragment to
-a directed graph with a single root (a tree) 
-
-## Practical considerations
-   ...
-
-
-## Currently phenopacket implementation:
- 
-A hierarchical record consisting of a container 
-with a human readable label (title) and a unique identifier
- 
-<PFX:ppid> __<rdf:type>__ < PHENOPACKET_URL> .  
-<PFX:ppid> __<rdfs:label>__ "Phenopackert Name"::string .  
- 
-with one or more sections drawn from these catagories:
-  
- - "entities"  
-        <PFX:entity_id> <RO:part_of> <PFX:ppid> .
-        <PFX:entity_id> <rdfs:label> "entity label" .  
-        ...
-
- - "variants"  
-        <PFX:variant_id> <RO:part_of> <PFX:ppid> .
-        <PFX:variant_id> <rdfs:label> "variant label".
-        <PFX:variant_id> <HGVS:description> "hgvs_string".  
-        ...
-
- - "persons"  
-        <PFX:person_id> <RO:part_of> <PFX:ppid> .
-        <PFX:person_id> <PFX:has_strain> <PFX:strain_id> .
-        <PFX:strain_id> <rdfs:label> "strain label".                # secondary label
-        <PFX:person_id> <PFX:positive_instance> <PFX:onto_class> . 
-            ...
-        
-        <PFX:person_id> <PFX:negative_instance> <PFX:onto_class> .
-            ...
-        <PFX:person_id> <rdfs:description> "optional description" .
-        <PFX:person_id> <rdfs:label> "person label".
-        <PFX:person_id> <inTaxon> <NCBITaxon:xxx>  .  # really? expecting police dogs and corporations maybe?
-        <PFX:person_id> <PFX:sex> "code for the biological sex" .
-        <PFX:person_id> <>"date_of_birth" .
-        ...
-
-
- - "organisms"
-
- - "phenotype_profile"
-
- - "diagnosis_profile"
-
- - "environment_profile"
-
- 
------------------------------------------------------------
-
-(  
- Does order matter?  
- Should categories be lexically ordered?  
- Can there be repeats?  
- What about empty sections?  
-) 
-
-
- 
-#### To get the structure from the json-schemsa file into a tab indented tree
-    jq . phenopacket-schema.json | cut -f1 -d ':' | grep '[a-z$"_]' | sed 's/  /\t/g;s/^\t//g' > phenopacket_schema_structure.tab
-
-
-
-#### To get the named sections of records
-    grep '"id" : "urn:jsonschema:org:phenopackets:api' phenopacket-schema.json | cut -f7- -d':' | tr -d ',"'
-
-PhenoPacket
-model:entity:Entity
-model:entity:Variant
-model:entity:                            # (miss used)
-model:ontology:OntologyClass             # reused
-model:entity:Organism
-model:association:PhenotypeAssociation
-model:condition:Phenotype
-model:condition:Measurement
-model:condition:OrganismalSite           # reused
-model:condition:TemporalRegion
-model:condition:ConditionSeverity        # reused
-model:environment:Environment            # reused
-model:meta:Evidence                      # reused
-model:meta:Publication
-model:association:DiseaseOccurrenceAssociation
-model:condition:DiseaseOccurrence
-model:condition:DiseaseStage
-model:association:EnvironmentAssociation
-
-
-# to get the reused sections
- 
-grep '"$ref" : "urn:jsonschema:org:phenopackets:api' phenopacket-schema.json | cut -f7- -d':' | tr -d ',"' | sort -u
-
-model:condition:ConditionSeverity
-model:condition:OrganismalSite
-model:condition:TemporalRegion
-model:environment:Environment
-model:meta:Evidence
-model:ontology:OntologyClass
-
-
-# to get the relations
-
-egrep '"(id|\$ref)" : "urn:' phenopacket-schema.json | uniq | sed 's/"id"//g;s/"\$ref"//g;s/: "urn:jsonschema:org:phenopackets:api://g;s/  /\t/g;s/^\t//g' | tr -d '",' > pheno_packet_class.tab
-
-# collapse dup sibbling classes 
-# add in a blank node where indentation more than one tab greater than predecessor
-
-pheno_packet_class_bnode.tab
-################################################
-
-
-
-python2 ./outline_to_dot.py --tree=True  pheno_packet_class_bnode.tab > pheno_packet_class_bnode.gv
