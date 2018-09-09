@@ -55,9 +55,11 @@ arbitrary.
 Although I am motivated by phenotypes in particular, my hope is this document
 may be applicable to other domains requiring a graph/network representation.
 
-Graph algorithms are of a higher order of complexity than list algorithms,
-some graph algorithm have no known efficient solutions including 
-the simple sounding "_Is this graph within that graph?_"
+Graph algorithms are of a higher order of complexity than list algorithms,  
+(a list is special degenerate case of a graph that never branches)  
+some graph algorithm have no known efficient solutions including  
+the simple sounding  
+"_Is this graph within that graph?_"
 (see: [Subgraph isomorphism problem](https://en.wikipedia.org/wiki/Subgraph_isomorphism_problem))
 
 Short of a world changing breakthrough in Mathematics
@@ -85,9 +87,9 @@ interchange formats which limit computational complexity are necessary.
 
 ## On Graph Structure
 
-Computability and expressiveness are less nuanced than the policy issues to come.
-On one hand you have to be able to communicate something useful
-and on the other hand every bit of flexibility in expression allowed reduces
+Computability and expressiveness are less nuanced than the policy issues to come.  
+On one hand you have to be able to communicate something useful  
+and on the other hand every bit of flexibility in expression allowed, reduces
 the scale achievable.
 
 So not allowing anything which is not necessary is the clear path.
@@ -112,7 +114,7 @@ I am using the terms `nodes` and `edges` as the components which make a `graph`,
 and assuming no degenerate cases such as disconnected nodes or edges.
 
 
-All graphs are not created equal, and with the right constraints a graph becomes
+All graphs are not created equal, and with the right constraints, a graph becomes
 much easier to work with.
 
 Several constraints to make graph processing easier:
@@ -129,22 +131,22 @@ see one twice because you are in an infinite loop.
 - Limit the number of directed edges coming into a node to at most one.
  
 It is only quasi true because if we allow the same node
-be shared by different graphs then, __when combined__,
+be shared by different graphs then, __when combined__,  
 there may be one incoming edge from each of the different graphs
 the node belongs to, which is exactly what we want.
 
-With these three constraints we have simplified general graphs into
-[directed rooted trees](https://en.wikipedia.org/wiki/Tree_\(graph_theory\))
-which are far more computable than complete graphs and still fairly expressive
+With these three constraints we have restricted graphs in general to
+[directed rooted trees](https://en.wikipedia.org/wiki/Tree_\(graph_theory\))  
+which are far more computable than complete graphs and still fairly expressive, 
 especially when these trees are allowed to overlap  
 (have nodes other than the root node in common),
 because they form a
-[directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph)
-which is often the sweet spot in complexity between modeling and computing.
+[directed acyclic graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph) or __DAG__  
+which is often the sweet spot in complexity between modeling and computing.  
 
 Note: a `tree` _is_  a `graph` just one that is constrained to have exactly
-one fewer edges than nodes. So as we talk about trees, we are just talking about
-deliberately simplified graphs. 
+one fewer edges than nodes.  
+So as we talk about trees, we are just talking about deliberately simplified graphs. 
 
 Nodes in a tree are of three types,
 
@@ -158,7 +160,7 @@ Leaf nodes are used to carry external data and types.
 
 
 We can not know all of the leaf/data node values in advance,
-but we can and must externally predefine,
+but we can and must know, externally predefine,
 label and type every internal node and edge.
 
 Directed rooted trees can also be seen as unordered lists of unordered lists.
@@ -170,10 +172,10 @@ for ease and efficiency when reading, writing and verifying.
 The simplest structural pattern I believe could suffice is
 one which could model of a deck of flash cards where
 cards in the deck are generally related by having a similar theme.
-and questions one the front of each card are exactly related to answers
+and questions on the front of each card are exactly related to answers
 on the back of the same card. This pattern forms a hierarchy four-ish levels deep:
-deck, card, front_question, back_answer,  (and possibly types, think color coded).
-A deck may have many cards and each card many have many questions and answers.
+deck, card, front_question, back_answer,  (and possibly types, think color coded).  
+There can be many decks, a deck may have many cards and each card many have many questions and answers.
 
 
 - Deck
@@ -202,12 +204,12 @@ A deck may have many cards and each card many have many questions and answers.
 where the `Card`s  in a `Deck` may share `Question`s which are
 associated with _Answers_.  
 In practice  I expect decks and perhaps cards
-may have attendent fields such as  
+may have attendant fields such as  
  - ID  
  - type  
  - label  
 
-Although not explicitly shown here _Answers_ should be typeable.
+Although not explicitly shown here _Answers_ could be typeable.
 
 
 Depending on your background this may sound like:
@@ -266,40 +268,39 @@ If these predefined patterns are drawn from well established libraries
 of patterns then graph fragments from unrelated sources may
 overlap in a meaningful way despite the data having nothing specific in common.
 
-A good source for the most generic of these predefined patterns is the
+A good source for the most generic of these predefined patterns is the  
 [W3C Resource Description Framework](https://en.wikipedia.org/wiki/Resource_Description_Framework)
-which has been in use for over twenty years now and has most of the kinks worked out.  
+which has been in use for a couple of decades now  
+and has most of the kinks worked out.  
 As more specific patterns become necessary we must adopt or if necessary create
-[ontologies](http://tomgruber.org/writing/ontology-definition-2007.htm) which
-carefully describe the patterns we are expressing in a way that allows them
-to meaningfully interact in a mechanistic way with other unknown patterns. 
+[ontologies](http://tomgruber.org/writing/ontology-definition-2007.htm)  
+which carefully describe the patterns we are expressing in a way that allows them to  
+meaningfully interact in a mechanistic way with other unknown patterns. 
 
-Some core elements of RDF which are applicable to every internal
-node and many leaf nodes regardless of the domain are:  
+Some core elements of RDF which are applicable to every internal node  
+and many leaf nodes regardless of the domain are:  
 
  - `rdf:type`  which identifies the concept/resource in an external ontology
  - `rdfs:label` (convenience) short human readable string for the concept/resource  
  - `rdfs:comment` optional for longer human readable descriptions.
 
 
-Although the concepts thus far are broadly applicable
-for Semantic Exchanges the use case I need to focus on is
-biomedical phenotypes and related concepts including genotype,
-environments, substances etc.
+Although the concepts thus far are broadly applicable for Semantic Exchanges  
+the use case I need to focus on is biomedical phenotypes and related concepts  
+including genotype, environments, substances etc.  
 so the ontologies I will refer to are mainly from
 [Open Biomedical Ontologies](http://www.obofoundry.org/)(OBO) 
 
 
 ## On Paths
 
-A `path` in a graph is an alternating sequence of nodes and edges.
-In the directed rooted trees proposed here, there is
-exactly one path from the root node to each and every leaf node.
+A `path` in a `graph` is an alternating sequence of nodes and edges.  
+In the directed rooted trees proposed here, there is exactly one path from the root node  
+to each and every leaf node.  
 Furthermore, unlike these short trees themselves which are
-unordered lists of unordered lists,
-the set of all paths in a tree is
-a single unordered list of distinctly ordered lists, where the
-order comes from the constraint of using directed edges.  
+unordered lists of unordered lists,  
+the set of all paths in a tree is a single unordered list of distinctly ordered lists,  
+where the order arises from the constraint of using directed edges.  
 
 A collection of trees (forest) may have their sets of paths
 (ordered lists) all collected together.
@@ -318,10 +319,117 @@ the set of nodes we have, and the process repeats.
 
 If we run out of nodes, then we do not have an answer.
 
-This of course is the simplest case, more likely
-there are constraints on the direction nodes in a path are found,
-and more expensive, may only except a path if a valid DAG
+This of course is the simplest case,  
+more likely there are constraints on the direction nodes in a path are found,  
+and more expensive, may only except a path if a valid DAG  
 can be assembled including the trees the 'way' is found within.
+
+
+
+## RDF 
+RDF has record oriented serialization such as notation3 and turtle.  
+where turtle is a simplification of notation3 which omits the more dynamic
+parts of the language.
+
+
+### [turtle](https://www.w3.org/TR/turtle/)
+Turtle is a close-ish fit for the tree representation I have discussed this far.
+
+    <deck_1> a <foo:shrub> ;
+        <rdf:label> "Trival" ;
+        <foo:has_card> <card_1>, <card_2>, <card_3> .
+    <card_1> a <foo:card>;
+        <foo:key_value> <q1:a1>,<q2:a2>,<q3:a3> .
+    <card_2> ...
+    <q1:a1> <foo:q> "question 1" ;
+            <foo:a> "answer 1" .
+    ...
+
+but not really because cards an Q/A are out at the same indent as the deck  
+
+###  [n-triples](https://www.w3.org/TR/n-triples/)
+
+RDF has an edge orientated serialization called n-triples consisting of just
+
+  `<subject> <predicate> <object>` .
+
+which renders our example as :
+
+    <deck_1> a <foo:shrub> .
+    <deck_1> <rdf:label> "Trival" .
+    <deck_1> <foo:has_card> <card_1> .
+    <deck_1> <foo:has_card> <card_2> .
+    <deck_1> <foo:has_card> <card_3> .
+    <card_1> a <foo:card> .
+    <card_1> <foo:key_value> <q1:a1> .
+    <card_1> <foo:key_value> <q2:a2> .
+    <card_1> <foo:key_value> <q3:a3> .
+    <card_2> a <foo:card> .   
+    ...
+    <q1:a1> <foo:q> "question 1" .
+    <q1:a1> <foo:a> "answer 1" .
+    ...
+
+### [n-quads](https://www.w3.org/TR/n-quads/)
+
+n-quads adds a `graph name` to the end each line of n-triple  
+and is intended to provide a context or namespace the edge found in. 
+
+    <subect> <predicate> <object> <graph_name> .
+
+
+However the trailing graph_name is just an IRI identifier slot which we could repurpose  
+as an edge identifier allowing edge properties to be first class citizens.
+
+This incidentally also provides a way to express a path from root to leaf  
+in these short rooted trees I am promoting as shrubs.  
+
+    <deck> <question> <answer> <card> .
+
+Which is in the wrong order for people, but machines don't care (much).  
+
+Here I will assume I am using my own home made quad store (in postgres)  
+and can order columns as I choose.  
+    
+    <deck> <card> <question> <answer> .
+
+generalizes to:  
+
+    <subject> <edge1> <predicate> <object> .
+    
+and we are free to continue with
+
+    <edge1> <edge2> <property> <value> .
+
+to attribute `edge1` with specific qualities  
+
+Considering the named graph as an edge identifier also permits  
+an extensible solution to the tricky problem of typed literals in SPARQL.  
+
+Namely SPARQL considers the optional type on a literal  
+as integral to the literal, hence you have to know a priori  
+if and how a literal you may not know even exists is typed. (spoiler: you typically don't)
+
+However with the edge identified we can just add a quad  
+
+    <edge1> <edge3> <foo:lit_type> <xsd:string> .
+or    
+
+    <edge1> <edge4> <foo:lit_lang> "@en" .
+
+
+Then in our SPARQL queries, we can include literal types & language clauses or not.
+
+
+
+
+
+
+
+ 
+
+
+ 
 
 
 ## Metadata Policy 
