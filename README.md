@@ -8,9 +8,9 @@ _hence: may still be too simple at a given point_
 
 Semantic graph exchange has a low level format in Resource Description Format
 ([RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework))
-which communicates at the level of __edges__ which allow any graph to be
+that communicates at the level of __edges__ which allow any graph to be
 represented.
-This includes graphs which are nonsense or intractable.
+This includes graphs which are nonsense or intractable as long as the edges form a set.
 
 Semantic graph exchange has a high level format in Web Ontology Language
 ([OWL](https://en.wikipedia.org/wiki/Web_Ontology_Language)) which is
@@ -18,7 +18,7 @@ a formal, committee specified [Description Logic](https://en.wikipedia.org/wiki/
 language for representing anything logically describable.
 That is OWL communicates the full conceptual graph and
 what may be done with it simultaneously.
-When implemented correctly it works remarkably well,
+When implemented correctly it works remarkably,
 allowing mechanical reasoning humans could never cover as well.
 But even at its most tractable, an OWL file benefits from special
 [tooling](https://protege.stanford.edu/) to author or even view. 
@@ -48,7 +48,7 @@ Genotype data is basically ordered linear lists (DNA RNA genes proteins ...)
 algorithms for working with ordered lists are tractable and well behaved.
 Only incremental improvements may be expected in the general case.
 
-Capturing Phenotypes requires a branching data structure to describe entities
+Capturing phenotypes requires a branching data structure to describe entities
 and related features where the order between the relationships is strictly
 arbitrary.
 
@@ -68,7 +68,7 @@ if they are to scale along with genomic sequence data.
 
 The Computer Science background links included in this document are here to
 convey the magnitude of the issue and necessity of the proposed constraints.
-However, one need not closely follow the math and jargon to appreciate that
+However, one need not closely follow the math and computer science jargon to appreciate that
 neither fifty years of brilliant minds nor million dollar prizes have
 produced solutions to the fundamental problems,
 which lends weight to the importance of  
@@ -167,12 +167,14 @@ These unordered lists could be quite arbitrary but if we limit ourselves
 to a simple repeatable pattern they become more predictable which is important
 for ease and efficiency when reading, writing and verifying.
 
-The simplest structural pattern I believe could suffice is
-one which could model of a deck of flash cards where
-cards in the deck are generally related by having a similar theme.
+The simplest structural pattern I believe could suffice is  
+one which could model of a deck of flash cards where  
+cards in the deck are generally related by having a similar theme,  
 and questions one the front of each card are exactly related to answers
-on the back of the same card. This pattern forms a hierarchy four-ish levels deep:
-deck, card, front_question, back_answer,  (and possibly types, think color coded).
+on the back of the same card.  
+This pattern forms a hierarchy about four (read five) levels deep:
+deck, card, front_question, back_answer  
+(and implicitly, the unique path from deck to answer).    
 A deck may have many cards and each card many have many questions and answers.
 
 
@@ -202,12 +204,13 @@ A deck may have many cards and each card many have many questions and answers.
 where the `Card`s  in a `Deck` may share `Question`s which are
 associated with _Answers_.  
 In practice  I expect decks and perhaps cards
-may have attendent fields such as  
+may have attendant fields such as  
  - ID  
  - type  
  - label  
 
-Although not explicitly shown here _Answers_ should be typeable.
+Although not explicitly shown here _Answers_ are all typeable  
+by forming a new question involving the _Answers_ path which is the type.
 
 
 Depending on your background this may sound like:
@@ -219,26 +222,26 @@ Depending on your background this may sound like:
  
 Or any number of other phrases, many names for a useful concept.
 
-This simple pattern is useful as a building block
-in a more complex model when we allow a leaf (_Answer_) of one building block
-the be the root (`Deck`) of another building block.
-(Note: we do not allow new decks to appear anywhere but as a root or leaf)
+This simple pattern is useful as a building block  
+in a more complex model when we allow a leaf (_Answer_) of one building block  
+the be the root (`Deck`) of another building block.  
+(Note: we do not allow _Decks_ to appear anywhere but as a root or leaf)  
 
 With the deck of flash cards analogy;  
 The answer on one of the first Deck's card would be to switch to a different deck.
 
-The only strict rule would be: a 'Deck' may only appear exactly once
-on any branch of the tree.
-I suspect a more sensible rule is the generalization:
+The only strict rule would be:  
+A'Deck' may only appear exactly once on any branch of the tree to prevent cycles.  
+I suspect a more sensible rule is the generalization:  
 that a deck should only exist once in given a tree.
 
 
 note: the generic terms `Deck` & `Card` are just stand ins
 for more loaded terms such as  
 [collection, container, list, array, series ,sequence, set, bag, ... ]  
-and
+and/or
 [class, record, map, dictionary, associative array, ... ]  
-which through their use in practice may unintentionally imply
+which through their use in various practices may unintentionally imply
 either more or less than I intend at the moment.
 
 What is important is an outer construct loosely associating
@@ -248,28 +251,28 @@ inner constructs containing tight associations.
 ## On Graph Meaning
 
  
-As each internal node needs to be uniquely identified within the tree,
-a node is easily be given a pseudo random identifier/label
-based on the path from the root,
+Each node could be uniquely identified within the tree,
+by being given an identifier/label based on its path from the root.
+In particular each path from root to leaf is guaranteed to be unique.
+
 but there is also the opportunity for
 
  - all non-leaf nodes
  - some leaf nodes
  - all edges
  
-to have well established context.
-That is: everything which is not external data comes from and with
-globally shared, commonly accepted, referable, predefined, definitions,
-and usage patterns.   
+to have well established context.  
+That is: everything which is not external data comes from and with  
+globally shared, commonly accepted, referable, predefined, definitions, and usage patterns.   
 
-If these predefined patterns are drawn from well established libraries
-of patterns then graph fragments from unrelated sources may
-overlap in a meaningful way despite the data having nothing specific in common.
+If these predefined patterns are drawn from well established libraries of patterns  
+then graph fragments from unrelated sources may overlap in a meaningful ways  
+despite never having been deliberately coordinated.  
 
-A good source for the most generic of these predefined patterns is the
+A good source for the most generic of these predefined patterns is the  
 [W3C Resource Description Framework](https://en.wikipedia.org/wiki/Resource_Description_Framework)
 which has been in use for over twenty years now and has most of the kinks worked out.  
-As more specific patterns become necessary we must adopt or if necessary create
+As more specific patterns become necessary we must adopt or if necessary create  
 [ontologies](http://tomgruber.org/writing/ontology-definition-2007.htm) which
 carefully describe the patterns we are expressing in a way that allows them
 to meaningfully interact in a mechanistic way with other unknown patterns. 
@@ -282,11 +285,10 @@ node and many leaf nodes regardless of the domain are:
  - `rdfs:comment` optional for longer human readable descriptions.
 
 
-Although the concepts thus far are broadly applicable
-for Semantic Exchanges the use case I need to focus on is
-biomedical phenotypes and related concepts including genotype,
-environments, substances etc.
-so the ontologies I will refer to are mainly from
+Although the concepts thus far are broadly applicable for Semantic Exchanges  
+the use case I need to focus on is biomedical phenotypes and related concepts  
+including genotype, environments, substances etc.  
+So the ontologies I will refer to are mainly from
 [Open Biomedical Ontologies](http://www.obofoundry.org/)(OBO) 
 
 
@@ -299,10 +301,11 @@ Furthermore, unlike these short trees themselves which are
 unordered lists of unordered lists,
 the set of all paths in a tree is
 a single unordered list of distinctly ordered lists, where the
-order comes from the constraint of using directed edges.  
+order comes from the constraint of using directed edges in a tree.  
 
 A collection of trees (forest) may have their sets of paths
-(ordered lists) all collected together.
+(ordered lists) all collected together, and arranged so common (Deck) nodes
+can result in the extension of paths.  
 
 An answer to a question may be seen as finding a way through
 the forest that begins with the node you have and ends with
@@ -316,12 +319,129 @@ we have found a 'way' to an answer
 If not, nodes in the path (sans nodes seen) become
 the set of nodes we have, and the process repeats.
 
-If we run out of nodes, then we do not have an answer.
+If we run out of nodes, then we do not have an answer with the data available.
 
 This of course is the simplest case, more likely
 there are constraints on the direction nodes in a path are found,
 and more expensive, may only except a path if a valid DAG
-can be assembled including the trees the 'way' is found within.
+can be assembled including the trees the 'way' is found within.  
+
+
+
+## A bit of proposed practice
+
+There are five nodes needed to describe the  path from root to leaf
+
+  
+ - a deck     (RDF graph)       G 
+ - a card     (RDF subject)     S
+ - a question (RDF predicate)   P
+ - a answer   (ref object)      O
+ - quad ID    (edge identifier) E 
+
+What order to put them in?  There no perfect answer only trade offs.
+
+Older Jenna formats used the order of the first four. GSPO
+Current RDF quads format is specified as SPOG
+
+In RDF
+
+ - S  is an IRI  
+ - P  is an IRI  
+ - O  is an IRI or literal  
+ - G  is an IRI   
+
+I propose E is also an IRI, perhaps an extension of G.
+
+I do not like the official RDF quads format order. It places the well behaved G IRI  
+after the the potentially messy freetext O.     
+G E S P O  is my preferred  order (for now)
+
+A typical RDF association to say "_This gene is related to that phenotype_" looks like:  
+    
+    `<gene_1> <relation_1> <phenotype_1>  .`
+
+Unfortunately to qualify the statement itself, with provenance for example:    
+"_This gene is related to that phenotype, according to some article_"  
+we must reify the previous statement, here _BN0 is a __transient__ placeholder.  
+
+
+    <_BN0> <has_subject> <gene_1> .
+    <_BN0> <has_predicate> <relation_1> .
+    <_BN0> <has_object> <phenotype_1> .
+    <_BN0> <from_publication> <article_1> .
+
+It works, but in no line is the core intent expressed.
+
+--
+
+The same statement in this proposed format:  
+
+    `<GraphID_1> <EdgeID_1> <gene_1> <relation_1> <phenotype_1>  .`
+    `<GraphID_1> <EdgeID_2> <EdgeID_1> <from_publication> <article_1>  .`
+
+We can qualify the core statement directly using the edge identifier
+from the first statement as the subject of the second.
+
+--
+
+Qualifying the Graph identifier itself is how we would embed typical metadata
+     
+    `<GraphID_1> <EdgeID_7> <GraphID_1> <date_created> <20190229>  .`
+
+--
+
+Qualifying a Predicate is a way to express Negation  
+(if we ever decide to trust ourselves to implement that.)  
+
+
+-- 
+
+Typing of Object Literals is [a bit dodgey](https://www.w3.org/TR/2004/REC-rdf-concepts-20040210/#section-Literal-Equality) .
+
+    `<S> <P> "LIT"^^xsd:integer  .` 
+The problems are you have to be consistent when creating them and clear that you have.
+
+Because when asking a question, you must know the literal type and if it exists.
+
+
+
+To type a literal in this scheme;
+
+    `<GraphID_1> <EdgeID_5> <S> <P> "LIT"  .` 
+    `<GraphID_1> <EdgeID_6> <EdgeID_5> <literal_type> <integer>  .`
+
+Literal Types can be user extendable and play nicely with ontologies.
+this allows the literal to be typed or not when created and  
+the type (optionally) checked or not when queried
+
+
+At present, there is nothing to prevent qualifying an Object which is not a Literal.  
+However this should be considered very carefully.
+
+Because Object IRI/Curies (Entities) may be Subjects as well.
+And Entity is qualified in one place how does that influence spread?
+My impulse is to avoid qualifying subjects and non literal objects.
+  
+Which brings us to blank nodes.  
+in RDF blank node can be a grouping strategy 
+
+    <_BN1> <has_part> <thing_1> .
+    <_BN1> <has_part> <thing_2> .
+    <S1> <rel> <_BN1> .
+
+    
+
+
+
+--
+
+Note: appending E on G  as `G#E` would allow hijacking the RDF quads format
+by expressing E as an HTTP anchor on G. this does have the down side that
+they would either need to be split or existing tools may fail trying to
+consider every edge as a new graph
+
+
 
 
 ## Metadata Policy 
@@ -366,7 +486,7 @@ Uniform metadata must be supported, but not uniformly required.
 A proponent of [Catagory Theory](https://en.wikipedia.org/wiki/Category_theory)
 stated that as outlined to them, these structures maintain
 the key properties of [OLOG](https://en.wikipedia.org/wiki/Olog)s.
-Which would be reasuring conclusion having approached it from a purely pratical 
+Which would bereassuring conclusion having approached it from a purely practical 
 point of view.
 
 ## Summary
@@ -393,6 +513,6 @@ Trees may be linearized into paths which are ordered sequences of nodes
 which may be operated on with some of the same algorithms
 bioinformatics developed for various other sequences.
 
-A tree of only four-ish levels is pretty short,
+A directed tree of only five levels is pretty short,
 computationally not too expensive, and they look nice,
 they are shrubs.
